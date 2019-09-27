@@ -6,6 +6,9 @@
 # load detector
 /lcdd/url detector.lcdd
 
+# initialize the run
+/run/initialize
+
 # Create a GPS generator
 /hps/generators/create gps GPS
 
@@ -14,9 +17,6 @@
 /gps/energy 2. GeV
 /gps/direction 0 0 1
 /gps/position 0 0 -1. m
-
-# initialize the run
-/run/initialize
 
 # run
 /run/beamOn 1000

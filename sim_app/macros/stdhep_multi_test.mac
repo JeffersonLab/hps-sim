@@ -1,6 +1,9 @@
 # load detector
 /lcdd/url detector.lcdd
 
+# init the run
+/run/initialize
+
 /hps/generators/verbose 2
 
 # define StdHep event generator with multiple files
@@ -8,9 +11,6 @@
 /hps/generators/MyTest/file ap_events1.stdhep
 /hps/generators/MyTest/file ap_events2.stdhep
 /hps/generators/MyTest/verbose 2
-
-# init the run
-/run/initialize
 
 # LCIO output
 #/hps/lcio/verbose 2

@@ -1,13 +1,13 @@
 # load detector
 /lcdd/url detector.lcdd
 
+# init the run
+/run/initialize
+
 # define LHE event generator
 /hps/generators/create EventGen STDHEP
 /hps/generators/EventGen/file events.stdhep
 /hps/generators/EventGen/verbose 4
-
-# init the run
-/run/initialize
 
 # LCIO output
 /hps/lcio/verbose 2

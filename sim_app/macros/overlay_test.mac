@@ -5,6 +5,9 @@
 # load detector
 /lcdd/url detector.lcdd
 
+# init the run
+/run/initialize
+
 # print info as event generation runs
 /hps/generators/verbose 2 
 
@@ -28,8 +31,6 @@
 /hps/plugins/load BeamTrackSelectionPlugin
 /hps/plugins/BeamTrackSelectionPlugin/verbose 2
 
-# init the run
-/run/initialize
 
 # LCIO output
 /hps/lcio/verbose 2

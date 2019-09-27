@@ -1,6 +1,9 @@
 # load detector
 /lcdd/url detector.lcdd
 
+# init the run
+/run/initialize
+
 # print info as event generation runs
 /hps/generators/verbose 2
 
@@ -13,9 +16,6 @@
 # enable pair conversion event selection
 /hps/plugins/load PairCnvPlugin
 /hps/plugins/PairCnvPlugin/verbose 2
-
-# init the run
-/run/initialize
 
 # LCIO output
 /hps/lcio/verbose 2

@@ -1,6 +1,9 @@
 # load detector
 /lcdd/url target.gdml
 
+# init the run
+/run/initialize
+
 /random/setSeeds 12345 67890
 
 /hps/generators/verbose 2
@@ -13,9 +16,6 @@
 # event selection for beam particles
 /hps/plugins/load BeamTrackSelectionPlugin
 /hps/plugins/BeamTrackSelectionPlugin/verbose 2
-
-# init the run
-/run/initialize
 
 # LCIO output
 /hps/lcio/verbose 2

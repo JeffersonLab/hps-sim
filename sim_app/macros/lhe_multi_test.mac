@@ -1,6 +1,9 @@
 # load detector
 /lcdd/url detector.lcdd
 
+# init the run
+/run/initialize
+
 /hps/generators/verbose 2
 
 # define LHE event generator with multiple files
@@ -9,9 +12,6 @@
 /hps/generators/MyTest/file wab_5mrad_unweighted_events_000002.lhe 
 /hps/generators/MyTest/file wab_5mrad_unweighted_events_000003.lhe
 /hps/generators/MyTest/verbose 2
-
-# init the run
-/run/initialize
 
 # LCIO output
 /hps/lcio/verbose 2

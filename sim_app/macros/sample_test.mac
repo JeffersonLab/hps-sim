@@ -1,6 +1,9 @@
 # load detector
 /lcdd/url detector.lcdd
 
+# init the run
+/run/initialize
+
 # read a signal event every 10th Geant4 event
 /hps/generators/create SigGen LHE
 /hps/generators/SigGen/file signal1.lhe
@@ -14,9 +17,6 @@
 # generate 2 test events for every event
 /hps/generators/create TestGen TEST
 /hps/generators/TestGen/sample uniform 2
-
-# init the run
-/run/initialize
 
 # LCIO output
 /hps/lcio/verbose 2

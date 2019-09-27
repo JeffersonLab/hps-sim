@@ -1,12 +1,12 @@
 # load detector
 /lcdd/url detector.lcdd
 
+# init the run
+/run/initialize
+
 # define LHE event generator
 /hps/generators/create MyTest LHE
 /hps/generators/MyTest/file events.lhe
-
-# init the run
-/run/initialize
 
 # LCIO output
 /hps/lcio/verbose 2

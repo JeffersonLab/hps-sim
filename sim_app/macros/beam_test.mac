@@ -3,6 +3,9 @@
 
 /random/setSeeds 12345 67890
 
+# init the run
+/run/initialize
+
 /hps/generators/verbose 4
 
 # generate beam particles for one bunch
@@ -10,8 +13,6 @@
 #/hps/generators/BeamGen/param nelectrons 1
 /hps/generators/BeamGen/verbose 4
 
-# init the run
-/run/initialize
 
 # LCIO output
 /hps/lcio/verbose 4

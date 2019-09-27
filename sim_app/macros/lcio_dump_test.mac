@@ -1,10 +1,10 @@
 /lcdd/url detector.lcdd
 
+/run/initialize
+
 # merge in event stream
 /hps/lcio/merge/add MergeTest1
 /hps/lcio/merge/MergeTest1/file tritrig1.slcio
-
-/run/initialize
 
 /hps/lcio/verbose 4
 /hps/lcio/file lcio_merge_test.slcio
