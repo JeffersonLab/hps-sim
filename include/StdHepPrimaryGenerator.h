@@ -226,8 +226,7 @@ class StdHepPrimaryGenerator : public PrimaryGenerator {
             // TODO: check validity of index
             stdEvent_ = records_[index];
             if (removeEvent) {
-              std::cerr << "Erasing from a vector is a really bad idea. See: http://www.cplusplus.com/reference/vector/vector/erase/" << std::endl;
-              records_.erase(records_.begin() + index);
+                records_.erase(records_.begin() + index);
             }
         }
 
