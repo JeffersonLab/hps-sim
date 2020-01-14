@@ -1,10 +1,6 @@
 #ifndef HPSSIM_PRIMARYGENERATORACTION_H_
 #define HPSSIM_PRIMARYGENERATORACTION_H_
 
-#include <vector>
-#include <deque>
-#include <random>
-
 #include "CLHEP/Random/RandFlat.h"
 
 #include "G4VUserPrimaryGeneratorAction.hh"
@@ -114,7 +110,6 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 
         /** List of primary generators to run for every Geant4 event. */
         std::vector<PrimaryGenerator*> generators_;
-    
 };
 
 }
