@@ -1,8 +1,6 @@
 EXTERNALPROJECT_ADD(
-    
-    XERCES
-    
-    URL "http://apache.cs.utah.edu/xerces/c/3/sources/xerces-c-3.2.2.tar.gz"
+    XERCES 
+    URL "https://downloads.apache.org/xerces/c/3/sources/xerces-c-3.2.2.tar.gz"
     SOURCE_DIR "${CMAKE_BINARY_DIR}/xerces"
     
     UPDATE_COMMAND ""
