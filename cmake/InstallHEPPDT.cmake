@@ -1,4 +1,4 @@
-EXTERNALPROJECT_ADD(    
+externalproject_add(    
     HEPPDT
     GIT_REPOSITORY    "https://github.com/slaclab/heppdt"
     GIT_TAG           "master"

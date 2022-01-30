@@ -1,5 +1,5 @@
-if(NOT GEANT4_INSTALL_DATA)
-    set(GEANT4_INSTALL_DATA "ON")
+if( NOT GEANT4_INSTALL_DATA )
+    set( GEANT4_INSTALL_DATA "ON" )
 endif()
 
 if( NOT Geant4_TAG )
@@ -7,7 +7,7 @@ if( NOT Geant4_TAG )
 endif()
 string( REPLACE "v" "" Geant4_VERSION_NUMBER ${Geant4_TAG} )
 
-EXTERNALPROJECT_ADD(
+externalproject_add(
     Geant4
 
     GIT_REPOSITORY "https://github.com/Geant4/geant4"

@@ -1,10 +1,9 @@
-FIND_PATH( GDML_DIR include/G4Processor/GDMLProcessor.h )
+find_path( GDML_DIR include/G4Processor/GDMLProcessor.h )
 
-FIND_LIBRARY( GDML_LIBRARY gdml ${GDML_DIR}/lib/ )
+find_library( GDML_LIBRARY gdml ${GDML_DIR}/lib/ )
 
-SET( GDML_LIBRARY ${GDML_LIBRARY} )
+set( GDML_LIBRARY ${GDML_LIBRARY} )
 
-SET( GDML_INCLUDE_DIR ${GDML_DIR}/include )
+set( GDML_INCLUDE_DIR ${GDML_DIR}/include )
 
-INCLUDE( FindPackageHandleStandardArgs )
-FIND_PACKAGE_HANDLE_STANDARD_ARGS( GDML DEFAULT_MSG GDML_LIBRARY GDML_DIR )
+find_package_handle_standard_args( GDML DEFAULT_MSG GDML_LIBRARY GDML_DIR )
