@@ -1,5 +1,7 @@
 include(ExternalProject)
 
+include(FindPackageHandleStandardArgs)
+
 if(NOT DEPENDENCY_INSTALL_DIR)
     set(DEPENDENCY_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/extdeps)
 endif()

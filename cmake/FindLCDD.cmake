@@ -1,6 +1,5 @@
-FIND_PATH( LCDD_INCLUDE_DIR lcdd/core/LCDDProcessor.hh ${LCDD_DIR}/include )
+find_path( LCDD_INCLUDE_DIR lcdd/core/LCDDProcessor.hh ${LCDD_DIR}/include )
 
-FIND_LIBRARY( LCDD_LIBRARY lcdd ${LCDD_DIR}/lib/ )
+find_library( LCDD_LIBRARY lcdd ${LCDD_DIR}/lib/ )
 
-INCLUDE( FindPackageHandleStandardArgs )
-FIND_PACKAGE_HANDLE_STANDARD_ARGS( LCDD DEFAULT_MSG LCDD_INCLUDE_DIR LCDD_LIBRARY )
+find_package_handle_standard_args( LCDD DEFAULT_MSG LCDD_INCLUDE_DIR LCDD_LIBRARY )

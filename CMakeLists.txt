@@ -24,7 +24,7 @@ option( WITH_GEANT4_UIVIS "Build example with Geant4 UI and Vis drivers" ON )
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 # Dependency list
-set(DEPENDENCIES XERCES Geant4 GDML LCDD LCIO HEPPDT)
+set(DEPENDENCIES XercesC Geant4 GDML LCDD LCIO HEPPDT)
 
 # Install dependencies script
 include(InstallDeps)
@@ -51,7 +51,7 @@ else()
 
     # Configure include directories
     include_directories(include/)
-    include_directories(${XERCES_INCLUDE_DIR} ${LCIO_INCLUDE_DIRS} ${Geant4_INCLUDE_DIRS} ${GDML_INCLUDE_DIR} ${LCDD_INCLUDE_DIR}) 
+    include_directories(${XercesC_INCLUDE_DIR} ${LCIO_INCLUDE_DIRS} ${Geant4_INCLUDE_DIRS} ${GDML_INCLUDE_DIR} ${LCDD_INCLUDE_DIR}) 
 
     # Build the user plugin library
     file(GLOB_RECURSE plugin_sources plugins/*.cxx)
@@ -67,7 +67,7 @@ else()
     add_dependencies(hps-sim SimPlugins)
     
     # Add link libraries and directories
-    target_link_libraries(hps-sim ${XERCES_LIBRARY} ${Geant4_LIBRARIES} ${GDML_LIBRARY} ${LCDD_LIBRARY} ${LCIO_LIBRARIES} dl)
+    target_link_libraries(hps-sim ${XercesC_LIBRARY} ${Geant4_LIBRARIES} ${GDML_LIBRARY} ${LCDD_LIBRARY} ${LCIO_LIBRARIES} dl)
     link_directories(${GDML_LIBRARY_DIR} ${LCDD_LIBRARY_DIR} ${LCIO_LIBRARY_DIRS})
 
     # Install the binary
