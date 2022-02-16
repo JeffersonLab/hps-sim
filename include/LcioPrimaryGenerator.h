@@ -1,9 +1,3 @@
-/**
- * @file LHEPrimaryGenerator.h
- * @brief Class for generating a Geant4 event from LHE event data
- * @author Jeremy McCormick, SLAC National Accelerator Laboratory
- */
-
 #ifndef HPSSIM_LCIOPRIMARYGENERATOR_H_
 #define HPSSIM_LCIOPRIMARYGENERATOR_H_
 
@@ -77,6 +71,14 @@ class LcioPrimaryGenerator : public PrimaryGenerator {
          * Cache a list of valid event numbers in the file that can be used when running in random access mode.
          */
         void cacheEvents();
+
+        /**
+         * @brief Utility method for statically generating an event from a collection of LCIO MC particles
+         * 
+         * @param particles The list of particles
+         * @param anEvent The Geant4 event
+         */
+        static void generateEvent(EVENT::LCCollection* particleColl, G4Event*anEvent);
 
     private:
 

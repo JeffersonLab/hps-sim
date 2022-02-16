@@ -13,8 +13,8 @@
 // - Version 1.0 (23-Oct-2003)
 //
 ////
-#ifndef LXDR__HH
-#define LXDR__HH
+#ifndef HPSSIM_LXDR__HH
+#define HPSSIM_LXDR__HH
 
 #include <stdio.h>
 

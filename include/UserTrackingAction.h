@@ -39,8 +39,15 @@ class UserTrackingAction : public G4UserTrackingAction {
         }
 
         void PreUserTrackingAction(const G4Track* aTrack) {
-            //std::cout << "UserTrackingAction: pre tracking - " << aTrack->GetTrackID() << std::endl;
+            std::cout << "UserTrackingAction: pre tracking - " << aTrack->GetTrackID() << std::endl;
+            std::cout << "  PDGID: " << aTrack->GetParticleDefinition()->GetPDGEncoding() << std::endl;
 
+            if (aTrack->GetDynamicParticle()->GetParticleDefinition()->GetParticleType() == "extra") {
+                std::cout << "[ PreUserTrackingAction ] Forcing extra particle " << 
+                    aTrack->GetParticleDefinition()->GetPDGEncoding() << " to 0 kE" << std::endl;            
+                (const_cast<G4Track*>(aTrack))->SetKineticEnergy(0.);
+            }
+ 
             int trackID = aTrack->GetTrackID();
 
             // This is set for LCDD sensitive detectors, which is strange but we don't want to change it right now!
@@ -60,7 +67,7 @@ class UserTrackingAction : public G4UserTrackingAction {
         }
 
         void PostUserTrackingAction(const G4Track* aTrack) {
-            //std::cout << "UserTrackingAction: post tracking - " << aTrack->GetTrackID() << std::endl;
+            std::cout << "UserTrackingAction: post tracking - " << aTrack->GetTrackID() << std::endl;
 
             // Save extra trajectories on tracks that were flagged for saving during event processing.
             auto info = dynamic_cast<UserTrackInformation*>(aTrack->GetUserInformation());
@@ -75,7 +82,7 @@ class UserTrackingAction : public G4UserTrackingAction {
             if (info->getSaveFlag()) {
                 if (!trackMap_.hasTrajectory(aTrack->GetTrackID())) {
                     storeTrajectory(aTrack);
-                    //std::cout << "UserTrackingAction: Storing extra trajectory for track " << aTrack->GetTrackID() << std::endl;
+                    std::cout << "UserTrackingAction: Storing extra trajectory for track " << aTrack->GetTrackID() << std::endl;
                 }
             }
 
@@ -93,8 +100,8 @@ class UserTrackingAction : public G4UserTrackingAction {
 
                     // Pass save flag from track info to the trajectory for persistency engine.
                     bool saveFlag = UserTrackInformation::getUserTrackInformation(aTrack)->getSaveFlag();
-                    //std::cout << "UserTrackingAction: Passing save flag " << saveFlag
-                    //        << " to trajectory " << aTrack->GetTrackID() << std::endl;
+                    std::cout << "UserTrackingAction: Passing save flag " << saveFlag
+                            << " to trajectory " << aTrack->GetTrackID() << std::endl;
                     traj->setSaveFlag(saveFlag);
                 }
             }
@@ -104,7 +111,7 @@ class UserTrackingAction : public G4UserTrackingAction {
 
         void storeTrajectory(const G4Track* aTrack) {
 
-            //std::cout << "UserTrackingAction: Creating new trajectory for " << aTrack->GetTrackID() << std::endl;
+            std::cout << "UserTrackingAction: Creating new trajectory for " << aTrack->GetTrackID() << std::endl;
 
             // Create a new trajectory for this track.
             fpTrackingManager->SetStoreTrajectory(true);
@@ -141,9 +148,9 @@ class UserTrackingAction : public G4UserTrackingAction {
             }
 
             // DEBUG
-            //if (isPrimary) {
-            //    std::cout << "UserTrackingAction: Track " << aTrack->GetTrackID() << " is a primary." << std::endl;
-            //}
+            if (isPrimary) {
+                std::cout << "UserTrackingAction: Track " << aTrack->GetTrackID() << " is a primary." << std::endl;
+            }
 
             if ((storeSecondaries && aboveEnergyThreshold) || isPrimary) {
                 /*

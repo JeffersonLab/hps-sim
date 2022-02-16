@@ -30,8 +30,8 @@
 //   o Added numEvents() method by request.
 //
 ////
-#ifndef LSTDHEP__HH
-#define LSTDHEP__HH
+#ifndef HPSSIM_LSTDHEP__HH
+#define HPSSIM_LSTDHEP__HH
 
 #include "lXDR.h"
 #include <vector>

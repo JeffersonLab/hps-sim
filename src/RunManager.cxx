@@ -6,7 +6,7 @@
 #include "lcdd/core/LCDDDetectorConstruction.hh"
 
 /*
- * HPS
+ * hps-sim
  */
 #include "RunManager.h"
 #include "PrimaryGeneratorAction.h"
@@ -15,7 +15,8 @@
 #include "UserRunAction.h"
 #include "UserEventAction.h"
 #include "UserStackingAction.h"
-#include "UnknownDecayPhysics.h"
+//#include "UnknownDecayPhysics.h"
+#include "ExtraPhysics.hh"
 
 namespace hpssim {
 
@@ -52,7 +53,10 @@ void RunManager::setupPhysList() {
     auto physList = physListFactory_->GetReferencePhysList(physListName_);
 
     // TODO: Add messenger command to toggle this extra physics on/off.
-    physList->RegisterPhysics(new UnknownDecayPhysics);
+    //physList->RegisterPhysics(new UnknownDecayPhysics);
+
+    // Register HPS-specific particles and processes
+    physList->RegisterPhysics(new ExtraPhysics);
 
     this->SetUserInitialization(physList);
 

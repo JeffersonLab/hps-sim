@@ -12,57 +12,55 @@ LcioPrimaryGenerator::~LcioPrimaryGenerator() {
     }
 }
 
-void LcioPrimaryGenerator::GeneratePrimaryVertex(G4Event* anEvent) {
-    auto particleColl = lcEvent_->getCollection("MCParticle");
+void LcioPrimaryGenerator::generateEvent(EVENT::LCCollection* particleColl, G4Event*anEvent) {
     std::map<EVENT::MCParticle*, G4PrimaryParticle*> particleMap;
-    if (verbose_ > 1) {
-        std::cout << "LcioPrimaryGenerator: Generating event from " << particleColl->getNumberOfElements()
-                << " particles" << std::endl;
-    }
     if (particleColl->getNumberOfElements()) {
+        std::cout << "[ LcioPrimaryGenerator ] Generating event" << std::endl;
         for (int i = 0; i < particleColl->getNumberOfElements(); ++i) {
             auto particle = static_cast<EVENT::MCParticle*>(particleColl->getElementAt(i));
-            if (particle->getGeneratorStatus() || particle->getParents().size() == 0) {
-                int pid = particle->getPDG();
-                double energy = particle->getEnergy() * GeV;
-                auto p = particle->getMomentum();
-                G4PrimaryParticle* primaryParticle = new G4PrimaryParticle();
-                primaryParticle->SetParticleDefinition(G4ParticleTable::GetParticleTable()->FindParticle(pid));
-                primaryParticle->Set4Momentum(p[0] * GeV, p[1] * GeV, p[2] * GeV, energy);
-                if (verbose_ > 3) {
-                    std::cout << "LcioPrimaryGenerator: Created primary with PID " << pid << " and momentum "
-                            << primaryParticle->GetMomentum() << " and energy " << primaryParticle->GetTotalEnergy()
-                            << std::endl;
+            std::cout << "Particle #" << i << " with PID " << particle->getPDG() << std::endl;
+            //if (particle->getGeneratorStatus() || particle->getParents().size() == 0) {
+            int pid = particle->getPDG();
+            double energy = particle->getEnergy() * GeV;
+            auto p = particle->getMomentum();
+            G4PrimaryParticle* primaryParticle = new G4PrimaryParticle();
+            //primaryParticle->SetParticleDefinition(G4ParticleTable::GetParticleTable()->FindParticle(pid));
+            primaryParticle->SetPDGcode(pid);
+            primaryParticle->Set4Momentum(p[0] * GeV, p[1] * GeV, p[2] * GeV, energy);
+            G4PrimaryVertex* vertex = nullptr;
+            if (!particle->getParents().size()) {
+                std::cout << "    Adding prim vtx" << std::endl;
+                vertex = new G4PrimaryVertex();
+                auto origin = particle->getVertex();
+                vertex->SetPosition(origin[0] * mm, origin[1] * mm, origin[2] * mm);
+                vertex->SetPrimary(primaryParticle);
+                anEvent->AddPrimaryVertex(vertex);
+            } else {
+                EVENT::MCParticle* mcpParent = particle->getParents()[0];
+                if (!mcpParent) {
+                    G4Exception("", "", FatalException, "Failed to find MCParticle parent.");
                 }
-                G4PrimaryVertex* vertex = nullptr;
-                if (!particle->getParents().size()) {
-                    vertex = new G4PrimaryVertex();
-                    auto origin = particle->getVertex();
-                    vertex->SetPosition(origin[0] * mm, origin[1] * mm, origin[2] * mm);
-                    vertex->SetPrimary(primaryParticle);
-                    anEvent->AddPrimaryVertex(vertex);
-                    if (verbose_ > 3) {
-                        std::cout << "LcioPrimaryGenerator: Added vertex at " << vertex->GetPosition() << std::endl;
-                    }
+                G4PrimaryParticle* primaryParent = particleMap[mcpParent];
+                if (primaryParent) {
+                    std::cout << "    Adding dau" << std::endl;
+                    primaryParent->SetDaughter(primaryParticle);
+                    double properTime = fabs((particle->getTime() - mcpParent->getTime()) * mcpParent->getMass())
+                            / mcpParent->getEnergy();
+                    std::cout << "    Proper time " << properTime << std::endl;
+                    primaryParent->SetProperTime(properTime * ns);
                 } else {
-                    EVENT::MCParticle* mcpParent = particle->getParents()[0];
-                    if (!mcpParent) {
-                        G4Exception("", "", FatalException, "Failed to find MCParticle parent.");
-                    }
-                    G4PrimaryParticle* primaryParent = particleMap[mcpParent];
-                    if (primaryParent) {
-                        primaryParent->SetDaughter(primaryParticle);
-                        double properTime = fabs((particle->getTime() - mcpParent->getTime()) * mcpParent->getMass())
-                                / mcpParent->getEnergy();
-                        primaryParent->SetProperTime(properTime * ns);
-                    } else {
-                        G4Exception("", "", FatalException, "Failed to find primary particle parent.");
-                    }
+                    G4Exception("", "", FatalException, "Failed to find primary particle parent.");
                 }
-                particleMap[particle] = primaryParticle;
             }
+            particleMap[particle] = primaryParticle;
+            //}
         }
     }
+}
+
+void LcioPrimaryGenerator::GeneratePrimaryVertex(G4Event* anEvent) {
+    auto particleColl = lcEvent_->getCollection("MCParticle");
+    generateEvent(particleColl, anEvent);
 }
 
 bool LcioPrimaryGenerator::isFileBased() {

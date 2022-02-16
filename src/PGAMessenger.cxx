@@ -9,6 +9,7 @@
 #include "PrimaryGeneratorAction.h"
 #include "StdHepPrimaryGenerator.h"
 #include "TestGenerator.h"
+#include "StdHepLcioPrimaryGenerator.h"
 
 #include <sstream>
 
@@ -33,6 +34,7 @@ PGAMessenger::PGAMessenger(PrimaryGeneratorAction* pga) : pga_(pga) {
     sourceType_["BEAM"]   = BEAM;
     sourceType_["LCIO"]   = LCIO;
     sourceType_["GPS"]    = GPS;
+    sourceType_["STDHEP_LCIO"] = STDHEP_LCIO;
 }
 
 void PGAMessenger::SetNewValue(G4UIcommand* command, G4String newValues) {
@@ -70,6 +72,8 @@ PrimaryGenerator* PGAMessenger::createGenerator(std::string name, std::string ty
         return new BeamPrimaryGenerator(name);
     } else if (srcType == LCIO) {
         return new LcioPrimaryGenerator(name);
+    } else if (srcType == STDHEP_LCIO) {
+        return new StdHepLcioPrimaryGenerator(name);
     } else if (srcType == GPS) { 
         return new GpsPrimaryGenerator("gps"); 
     }

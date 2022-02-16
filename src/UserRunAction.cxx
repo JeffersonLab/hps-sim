@@ -1,7 +1,11 @@
 #include "UserRunAction.h"
 
+// hps-sim
 #include "LcioPersistencyManager.h"
 #include "PrimaryGeneratorAction.h"
+
+// Geant4
+#include "G4EventManager.hh"
 
 namespace hpssim {
 
@@ -12,6 +16,10 @@ UserRunAction::~UserRunAction() {
 }
 
 void UserRunAction::BeginOfRunAction(const G4Run* aRun) {
+
+    G4PrimaryTransformer* trans = G4EventManager::GetEventManager()->GetPrimaryTransformer();
+    trans->SetUnknnownParticleDefined(true);
+    trans->SetVerboseLevel(3);
 
     // init LCIO persistence engine
     LcioPersistencyManager::getInstance()->Initialize();

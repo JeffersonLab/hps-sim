@@ -23,7 +23,8 @@ class PGAMessenger : public G4UImessenger {
             STDHEP,
             LCIO,
             BEAM, 
-            GPS
+            GPS,
+            STDHEP_LCIO
         };
 
         PGAMessenger(PrimaryGeneratorAction* pga);

@@ -1,6 +1,8 @@
 #ifndef HPSSIM_STDHEPPARTICLE_H_
 #define HPSSIM_STDHEPPARTICLE_H_
 
+#include "lStdHep.h"
+
 namespace hpssim {
 
 /**

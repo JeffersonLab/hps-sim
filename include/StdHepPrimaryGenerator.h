@@ -11,12 +11,16 @@
 #include "G4VPrimaryGenerator.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
 
-#include "lStdHep.h"
+#include "UTIL/lStdHep.hh"
 #include "StdHepParticle.h"
 #include "PrimaryGenerator.h"
 
 #include <vector>
+
+using UTIL::lStdHep;
 
 namespace hpssim {
 
@@ -60,40 +64,57 @@ class StdHepPrimaryGenerator : public PrimaryGenerator {
             /*
              * Assign mother and daughter particles.
              */
+            int ipar = 0;
             for (auto particle : particles) {
 
                 const lStdTrack& data = particle.getData();
-
-                //std::cout << "mom1, mom2, dau1, dau2: " << data.daughter1 << " " << data.daughter2 << " "
-                //        << data.mother1 << " " << data.mother2 << std::endl;
+                
+                std::cout << "Assigning particle parentage for #" << ipar << " with PID " << data.pid << std::endl;
+                
+                std::cout << "    mom1, mom2, dau1, dau2: " << data.daughter1 << " " << data.daughter2 << " "
+                    << data.mother1 << " " << data.mother2 << std::endl;
 
                 if (data.daughter1) {
                     long idau1 = data.daughter1 % 10000 - 1;
                     particle.setDaughter(0, &particles[idau1]);
+                    std::cout << "    Set dau1 " << idau1 << std::endl;
                 }
 
                 if (data.daughter2) {
                     long idau2 = data.daughter2 % 10000 - 1;
                     particle.setDaughter(1, &particles[idau2]);
+                    std::cout << "    Set dau2 " << idau2 << std::endl;
                 }
 
                 if (data.mother1) {
                     long imom1 = data.mother1 % 10000 - 1;
                     particle.setMother(0, &particles[imom1]);
+                    std::cout << "    Set mom1 " << imom1 << std::endl;
                 }
 
                 if (data.mother2) {
                     long imom2 = data.mother2  % 10000 - 1;
                     particle.setMother(1, &particles[imom2]);
+                    std::cout << "    Set mom2 " << imom2 << std::endl;
                 }
+                ++ipar;
             }
+
+            G4ParticleTable* tbl = G4ParticleTable::GetParticleTable();
+            G4ParticleDefinition* unknownParticleDef = tbl->FindParticle("unknown");
 
             /*
              * Main loop to generate the Geant4 primaries and vertices from the track data.
              */
             std::map<StdHepParticle*, G4PrimaryParticle*> particleMap;
             G4PrimaryVertex* vertex = nullptr;
+
+            int npart = 0;
             for (std::vector<StdHepParticle>::iterator it = particles.begin(); it != particles.end(); it++) {
+
+                if (verbose_ > 3) {
+                    std::cout << "Processing StdHep particle #" << npart << std::endl;
+                }
 
                 /*
                  * Get particle to generate, its data, and parentage info.
@@ -103,15 +124,38 @@ class StdHepPrimaryGenerator : public PrimaryGenerator {
                 StdHepParticle* mom = particle->getMother(0);
                 StdHepParticle* dau1 = particle->getDaughter(0);
 
+                if (mom != nullptr) {
+                    if (verbose_ > 3) {
+                        std::cout << "    Has mom" << std::endl;
+                    }
+                }
+
+                if (dau1 != nullptr) {
+                    if (verbose_ > 3) {
+                        std::cout << "    Has at least one dau" << std::endl;
+                    }
+                }
+
                 /*
                  * Create a new primary particle for this track.
                  */
                 G4PrimaryParticle* primary = new G4PrimaryParticle();
-                primary->SetPDGcode(data.pid);
+                if (tbl->FindParticle(data.pid) != nullptr) {
+                    if (verbose_ > 3) {
+                        std::cout << "    Found particle def for PDG " << data.pid << std::endl;
+                    }
+                    primary->SetPDGcode(data.pid);
+                } else {
+                    if (verbose_ > 3) {
+                        std::cout << "    Setting unknown particle def for PDG " << data.pid << std::endl;
+                    }
+                    primary->SetParticleDefinition(unknownParticleDef);
+                }
+
                 primary->Set4Momentum(data.Px * GeV, data.Py * GeV, data.Pz * GeV, data.E * GeV);
 
                 if (verbose_ > 3) {
-                    std::cout << "StdHepPrimaryGenerator: Creating primary with PDG ID " << data.pid << " and four-momentum: "
+                    std::cout << "    Creating primary with PDG ID " << data.pid << " and four-momentum: "
                             << data.Px * GeV << " " << data.Py * GeV << " " << data.Pz * GeV << " " << data.E * GeV
                             << " [GeV]" << std::endl;
                 }
@@ -122,7 +166,7 @@ class StdHepPrimaryGenerator : public PrimaryGenerator {
                      * This is a primary without a mother particle which needs its own vertex position.
                      */
                     if (verbose_ > 3) {
-                        std::cout << "StdHepPrimaryGenerator: Creating new vertex at ( "
+                        std::cout << "    Creating new vertex at ( "
                                 << data.X << ", " << data.Y << ", " << data.Z << " )" << std::endl;
                     }
                     vertex = new G4PrimaryVertex();
@@ -135,6 +179,9 @@ class StdHepPrimaryGenerator : public PrimaryGenerator {
                      */
                     G4PrimaryParticle* primaryMom = particleMap[particle->getMother(0)];
                     if (primaryMom) {
+                        if (verbose_ > 3) {
+                            std::cout << "    Adding dau to par" << std::endl;
+                        }
                         primaryMom->SetDaughter(primary);
                     } else {
                         // This should never happen but if it does we need to bail.
@@ -151,6 +198,8 @@ class StdHepPrimaryGenerator : public PrimaryGenerator {
                     //std::cout << "StdHepPrimaryGenerator: Setting proper time " << properTime << " on particle." << std::endl;
                     primary->SetProperTime(properTime * ns);
                 }
+                std::cout << std::endl;
+                ++npart;
             }
         }
 
