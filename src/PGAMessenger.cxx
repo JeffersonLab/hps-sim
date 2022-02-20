@@ -34,7 +34,7 @@ PGAMessenger::PGAMessenger(PrimaryGeneratorAction* pga) : pga_(pga) {
     sourceType_["BEAM"]   = BEAM;
     sourceType_["LCIO"]   = LCIO;
     sourceType_["GPS"]    = GPS;
-    sourceType_["STDHEP_LCIO"] = STDHEP_LCIO;
+    /*sourceType_["STDHEP_LCIO"] = STDHEP_LCIO;*/
 }
 
 void PGAMessenger::SetNewValue(G4UIcommand* command, G4String newValues) {
@@ -66,13 +66,13 @@ PrimaryGenerator* PGAMessenger::createGenerator(std::string name, std::string ty
         return new TestGenerator(name);
     } else if (srcType == LHE) {
         return new LHEPrimaryGenerator(name);
-    } else if (srcType == STDHEP) {
+    } /*else if (srcType == STDHEP) {
         return new StdHepPrimaryGenerator(name);
-    } else if (srcType == BEAM) {
+    }*/ else if (srcType == BEAM) {
         return new BeamPrimaryGenerator(name);
     } else if (srcType == LCIO) {
         return new LcioPrimaryGenerator(name);
-    } else if (srcType == STDHEP_LCIO) {
+    } else if (srcType == STDHEP) {
         return new StdHepLcioPrimaryGenerator(name);
     } else if (srcType == GPS) { 
         return new GpsPrimaryGenerator("gps"); 
