@@ -2,9 +2,9 @@ include(ExternalProject)
 
 include(FindPackageHandleStandardArgs)
 
-if(NOT DEPENDENCY_INSTALL_DIR)
-    set(DEPENDENCY_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/extdeps)
-endif()
+#if(NOT DEPENDENCY_INSTALL_DIR)
+set(DEPENDENCY_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/external)
+#endif()
 
 # Main loop to install each dependency (includes some hacks for Geant4 config)
 add_custom_target( extdeps )
