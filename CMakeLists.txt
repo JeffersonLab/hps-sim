@@ -1,5 +1,5 @@
 ##########################################################
-# CMake configuration for HPS sim application.           #
+# CMake configuration for HPS Sim application.           #
 #                                                        #
 # @author Jeremy McCormick <jeremym@slac.stanford.edu>   #
 #                                                        #
@@ -7,18 +7,31 @@
 
 project(HPSSIM)
 set(HPSSIM_VERSION 0.0.1)
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.16)
 
 # Check compiler version
-if(CMAKE_CXX_COMPILER_VERSION LESS 4.8)
-    message(FATAL_ERROR "The gcc compiler version '${CMAKE_CXX_COMPILER_VERSION}' is too old (at least 4.8 required).")
+if(CMAKE_CXX_COMPILER_VERSION LESS 7.0)
+    message(FATAL_ERROR "The compiler version '${CMAKE_CXX_COMPILER_VERSION}' is too old.")
+endif()
+
+# Set install dir if not explicitly provided as an option
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/install CACHE PATH "" FORCE)
+    message(STATUS "Install directory set to: ${CMAKE_INSTALL_PREFIX}")
+endif()
+
+# Set the build type
+set(default_build_type "Release")
+if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+    message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
+    set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE STRING "Choose the type of build." FORCE)
 endif()
 
 # Option to enable installation of external dependencies
-OPTION( INSTALL_DEPENDENCIES "Install external dependencies automatically" ON )
+OPTION(INSTALL_DEPENDENCIES "Install external dependencies automatically" ON)
 
 # Option to enable Geant4 visualization and UI components
-option( WITH_GEANT4_UIVIS "Build example with Geant4 UI and Vis drivers" ON )
+option(WITH_GEANT4_UIVIS "Build example with Geant4 UI and Vis drivers" ON)
 
 # Add project cmake scripts
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
@@ -29,18 +42,17 @@ set(DEPENDENCIES XercesC Geant4 GDML LCDD LCIO HEPPDT)
 # Install dependencies script
 include(InstallDeps)
 
-if( DEPENDENCIES_NOTFOUND )
+if(DEPENDENCIES_NOTFOUND)
     # In this case, the user needs to execute 'make' and then 'cmake' again for all the installed dependencies to be found.
     message("")
     message("Some dependencies were not found.  Run 'make' to build them, or rerun CMake and provide their location (e.g. Geant4_DIR etc.).")
-    message("Set '-DDEPENDENCY_INSTALL_DIR=/my/install/dir' to set the directory where external projects will be installed.")
     message("After building any missing dependencies you will need to rerun CMake to resolve them.")
     message("")
 else()
  
     # All dependencies were found or installed. The build can proceed.
 
-    message("All dependencies were found!")
+    #message("All dependencies were found!")
   
     # Define main binary executable  
     file(GLOB_RECURSE library_sources ${PROJECT_SOURCE_DIR}/src/*.cxx)
