@@ -6,15 +6,15 @@
 
 # define LHE event generator
 #/hps/generators/create EventGen STDHEP
-/hps/generators/create EventGen STDHEP_LCIO
+/hps/generators/create EventGen STDHEP
 /hps/generators/EventGen/file events.stdhep
-/hps/generators/EventGen/verbose 4
+#/hps/generators/EventGen/verbose 4
 
 # LCIO output
-/hps/lcio/verbose 2
+#/hps/lcio/verbose 2
 /hps/lcio/recreate
-/hps/lcio/file stdhep_test.slcio
+/hps/lcio/file sim_events_test.slcio
 
-/tracking/verbose 4
+#/tracking/verbose 4
 
 /run/beamOn 1
